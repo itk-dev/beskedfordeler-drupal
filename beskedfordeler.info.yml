@@ -1,0 +1,5 @@
+name: 'Beskedfordeler'
+type: module
+description: 'Provides endpoint for Beskedfordeler.'
+package: 'Beskedfordeler'
+core_version_requirement: ^9

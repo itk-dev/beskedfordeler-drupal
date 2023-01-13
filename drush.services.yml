@@ -1,0 +1,6 @@
+services:
+  Drupal\beskedfordeler\Commands\MessageCommands:
+      arguments:
+        - '@Drupal\beskedfordeler\Helper\MessageHelper'
+      tags:
+        - { name: drush.command }

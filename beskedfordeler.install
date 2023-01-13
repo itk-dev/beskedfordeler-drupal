@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Install file for Beskedfordeler.
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * @phpstan-return array<string, mixed>
+ */
+function beskedfordeler_schema() {
+  return [
+    'beskedfordeler_message' => [
+      'description' => 'Beskedfordeler message',
+      'fields' => [
+        'id' => [
+          'description' => 'The primary identifier.',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'created' => [
+          'description' => 'The Unix timestamp when the message was created.',
+          'type' => 'int',
+          'not null' => TRUE,
+        ],
+        'type' => [
+          'description' => 'The type of message.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'message' => [
+          'description' => 'The message.',
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => TRUE,
+        ],
+      ],
+      'indexes' => [
+        'created' => ['created'],
+        'type' => ['type'],
+      ],
+      'primary key' => ['id'],
+    ],
+  ];
+}

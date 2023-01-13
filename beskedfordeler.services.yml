@@ -1,0 +1,30 @@
+services:
+  logger.channel.beskedfordeler:
+    parent: logger.channel_base
+    arguments: [ 'beskedfordeler' ]
+
+  Drupal\beskedfordeler\Helper\MessageHelper:
+    arguments:
+      - '@event_dispatcher'
+      - '@database'
+      - '@logger.channel.beskedfordeler'
+
+  Drupal\beskedfordeler\EventSubscriber\DatabaseEventSubscriber:
+    arguments:
+      - '@database'
+      - '@logger.channel.beskedfordeler'
+    tags:
+      - { name: 'event_subscriber' }
+
+  Drupal\beskedfordeler\EventSubscriber\FileSystemEventSubscriber:
+    arguments:
+      - '@file_system'
+      - '@logger.channel.beskedfordeler'
+    tags:
+      - { name: 'event_subscriber' }
+
+  Drupal\beskedfordeler\EventSubscriber\LoggerEventSubscriber:
+    arguments:
+      - '@logger.channel.beskedfordeler'
+    tags:
+      - { name: 'event_subscriber' }
