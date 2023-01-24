@@ -1,0 +1,8 @@
+services:
+  Drupal\beskedfordeler_forward\EventSubscriber\ForwardEventSubscriber:
+    arguments:
+      - '@http_client'
+      - '@request_stack'
+      - '@logger.channel.beskedfordeler'
+    tags:
+      - { name: 'event_subscriber' }

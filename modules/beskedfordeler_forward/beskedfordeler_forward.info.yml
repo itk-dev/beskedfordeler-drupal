@@ -1,0 +1,10 @@
+name: 'Beskedfordeler forward'
+type: module
+description: 'Forward Beskedfordeler messages.'
+package: 'Beskedfordeler'
+core_version_requirement: ^9
+
+dependencies:
+  - beskedfordeler:beskedfordeler
+
+configure: beskedfordeler_forward.admin.settings
