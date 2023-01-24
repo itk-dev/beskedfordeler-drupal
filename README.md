@@ -19,6 +19,11 @@ composer require itk-dev/beskedfordeler
 drush pm:enable beskedfordeler
 ```
 
+Installing the module enables an `beskedfordeler/PostStatusBeskedModtag`
+endpoint to which the Beskedfordeler can send messages. See “[Fælleskommunal
+Beskedfordeler](https://docs.kombit.dk/latest/ba48e791)” for some details on how
+to use the endpoint.
+
 ## Client certificates
 
 Download root certificates from
@@ -136,6 +141,13 @@ The `FileSystemEventSubscriber` has an additional optional setting:
 # Default value: result of Drupal\Core\File\FileSystem::getTempDirectory()
 $settings['beskedfordeler']['event_subscriber']['file_system']['directory'] = DRUPAL_ROOT.'/beskedfordeler';
 ```
+
+## Forwarding messages
+
+The [Beskedfordeler forward module](modules/beskedfordeler_forward/README.md)
+can be used to forward messages received on the
+`beskedfordeler/PostStatusBeskedModtag` endpoint. See
+<modules/beskedfordeler_forward/README.md> for details on the module.
 
 ## Test
 
