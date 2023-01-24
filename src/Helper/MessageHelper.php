@@ -59,7 +59,9 @@ final class MessageHelper {
    */
   public function dispatch(string $type, string $message, int $createdAt): AbstractBeskedModtagEvent {
     $document = new \DOMDocument();
-    $document->loadXML($message);
+    if (!$document->loadXML($message)) {
+      throw new InvalidMessageException('Invalid XML');
+    }
 
     $eventType = $this->getEventType($type);
     $event = new $eventType($document, $createdAt);
