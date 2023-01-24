@@ -3,8 +3,8 @@
 namespace Drupal\beskedfordeler\Helper;
 
 use Drupal\beskedfordeler\Event\AbstractBeskedModtagEvent;
-use Drupal\beskedfordeler\Event\InvalidMessageException;
 use Drupal\beskedfordeler\Event\PostStatusBeskedModtagEvent;
+use Drupal\beskedfordeler\Exception\InvalidMessageException;
 use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;

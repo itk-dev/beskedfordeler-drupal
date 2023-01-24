@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\beskedfordeler\Event;
+namespace Drupal\beskedfordeler\Exception;
 
 /**
  * Invalid message exception.
