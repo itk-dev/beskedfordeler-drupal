@@ -1,17 +1,25 @@
 <?php
 
-namespace Drupal\beskedfordeler\Commands;
+namespace Drupal\beskedfordeler_database\Commands;
 
 use Drupal\beskedfordeler\Helper\MessageHelper;
+use Drupal\beskedfordeler_database\Helper\Helper;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Symfony\Component\Console\Exception\RuntimeException;
 
 /**
- * Drush commands file for beskedfordeler.
+ * Drush commands file for Beskedfordeler database.
  */
 final class MessageCommands extends DrushCommands {
+  /**
+   * The message helper.
+   *
+   * @var \Drupal\beskedfordeler\Helper\MessageHelper
+   */
+  private Helper $helper;
+
   /**
    * The message helper.
    *
@@ -22,7 +30,8 @@ final class MessageCommands extends DrushCommands {
   /**
    * Constructor.
    */
-  public function __construct(MessageHelper $messageHelper) {
+  public function __construct(Helper $helper, MessageHelper $messageHelper) {
+    $this->helper = $helper;
     $this->messageHelper = $messageHelper;
   }
 
@@ -43,7 +52,7 @@ final class MessageCommands extends DrushCommands {
   public function list(array $options = [
     'type' => NULL,
   ]): void {
-    $messages = $this->messageHelper->loadMessages($options['type']);
+    $messages = $this->helper->loadMessages($options['type']);
 
     foreach ($messages as $message) {
       $this->writeln(sprintf(
@@ -65,7 +74,7 @@ final class MessageCommands extends DrushCommands {
    * @usage beskedfordeler:message:show --help
    */
   public function show(int $id): void {
-    $message = $this->messageHelper->loadMessage($id);
+    $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {
       throw new RuntimeException(sprintf('Cannot find message with id %d.', $id));
@@ -85,7 +94,7 @@ final class MessageCommands extends DrushCommands {
    * @usage beskedfordeler:message:dispatch --help
    */
   public function dispatch(int $id): void {
-    $message = $this->messageHelper->loadMessage($id);
+    $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {
       throw new RuntimeException(sprintf('Cannot find message with id %d.', $id));
@@ -104,7 +113,7 @@ final class MessageCommands extends DrushCommands {
    */
   public function purge(): void {
     if ($this->confirm(dt('Purge all messages?'), Drush::affirmative())) {
-      $count = $this->messageHelper->purgeMessages();
+      $count = $this->helper->purgeMessages();
       $this->writeln(sprintf('All messages (%d) purged.', $count));
     }
     else {

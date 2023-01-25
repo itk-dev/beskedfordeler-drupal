@@ -1,6 +1,7 @@
 services:
-  Drupal\beskedfordeler\Commands\MessageCommands:
+  Drupal\beskedfordeler_database\Commands\MessageCommands:
       arguments:
+        - '@Drupal\beskedfordeler_database\Helper\Helper'
         - '@Drupal\beskedfordeler\Helper\MessageHelper'
       tags:
         - { name: drush.command }

@@ -118,30 +118,6 @@ services:
       - { name: 'event_subscriber' }
 ```
 
-### Enabling built-in event subscribers
-
-This module has three built-in event subscribers:
-
-1. `DatabaseEventSubscriber`: Store documents in database
-2. `FileSystemEventSubscriber`: Store documents in file system
-3. `LoggerEventSubscriber`: Log documents to Drupal log
-
-By default none of these are enabled, but they can be enabled in
-`setting.local.php`:
-
-```php
-$settings['beskedfordeler']['event_subscriber']['database']['enabled'] = TRUE;
-$settings['beskedfordeler']['event_subscriber']['file_system']['enabled'] = TRUE;
-$settings['beskedfordeler']['event_subscriber']['logger']['enabled'] = TRUE;
-```
-
-The `FileSystemEventSubscriber` has an additional optional setting:
-
-```php
-# Default value: result of Drupal\Core\File\FileSystem::getTempDirectory()
-$settings['beskedfordeler']['event_subscriber']['file_system']['directory'] = DRUPAL_ROOT.'/beskedfordeler';
-```
-
 ## Forwarding messages
 
 The [Beskedfordeler forward module](modules/beskedfordeler_forward/README.md)
@@ -149,19 +125,17 @@ can be used to forward messages received on the
 `beskedfordeler/PostStatusBeskedModtag` endpoint. See
 <modules/beskedfordeler_forward/README.md> for details on the module.
 
+## Storing messages in database
+
+The [Beskedfordeler database](modules/beskedfordeler_database/README.md) can be
+used to store messages received on the `beskedfordeler/PostStatusBeskedModtag`
+endpoint in the database. See <modules/beskedfordeler_database/README.md> for
+details on the module.
+
 ## Test
 
 ```sh
 curl --data '<e/>' --header 'content-type: application/xml' …/beskedfordeler/PostStatusBeskedModtag
-```
-
-## Drush commands
-
-```sh
-drush beskedfordeler:message:list --help
-drush beskedfordeler:message:show --help
-drush beskedfordeler:message:purge --help
-drush beskedfordeler:message:dispatch --help
 ```
 
 ## Coding standards

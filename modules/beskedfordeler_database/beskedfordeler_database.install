@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install file for Beskedfordeler database.
+ */
+
+use Drupal\beskedfordeler_database\Helper\Helper;
+
+/**
+ * Implements hook_schema().
+ *
+ * @see \Drupal\beskedfordeler_database\Helper\Helper::schema()
+ *
+ * @phpstan-return array<string, mixed>
+ */
+function beskedfordeler_database_schema() {
+  return \Drupal::service(Helper::class)->schema();
+}
