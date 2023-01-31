@@ -69,18 +69,54 @@ final class MessageCommands extends DrushCommands {
    *
    * @param int $id
    *   The message id.
+   * @param array $options
+   *   The command options.
+   *
+   * @option decode-data
+   *  If set, the actual message data will be decoded.
+   * @option data-only
+   *  Show only decoded data (implies --decode-data).
    *
    * @command beskedfordeler:message:show
    * @usage beskedfordeler:message:show --help
    */
-  public function show(int $id): void {
+  public function show(int $id, array $options = [
+    'decode-data' => FALSE,
+    'data-only' => FALSE,
+  ]): void {
     $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {
       throw new RuntimeException(sprintf('Cannot find message with id %d.', $id));
     }
     else {
-      $this->output()->write($message->message);
+      $document = new \DOMDocument();
+      $document->formatOutput = TRUE;
+      $document->loadXML($message->message);
+
+      $dataOnly = $options['data-only'];
+      $decodeData = $dataOnly || $options['decode-data'];
+      if ($decodeData) {
+        $xpath = new \DOMXPath($document);
+        $xpath->registerNamespace('data', 'urn:besked:kuvert:1.0');
+        if ($nodes = $xpath->query('//data:Base64')) {
+          foreach ($nodes as $node) {
+            assert($node instanceof \DOMElement);
+            $data = new \DOMDocument();
+            $data->formatOutput = TRUE;
+            $data->loadXML(base64_decode($node->nodeValue));
+            $content = $data->saveXML();
+            if ($dataOnly) {
+              $this->output()->write($content);
+              return;
+            }
+            else {
+              $node->replaceChild($document->createCDATASection($content), $node->firstChild);
+            }
+          }
+        }
+      }
+      $this->output()->write($document->saveXML());
     }
   }
 
