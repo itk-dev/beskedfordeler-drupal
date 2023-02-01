@@ -109,12 +109,12 @@ class Controller extends ControllerBase {
   private function buildResponseDocument(int $statusCode, string $errorMessage = NULL): \DOMDocument {
     $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:ModtagBeskedOutputType xmlns="urn:oio:sag-dok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">
+<ns2:ModtagBeskedOutput xmlns="urn:oio:sag-dok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">
  <StandardRetur>
   <StatusKode/>
   <FejlbeskedTekst/>
  </StandardRetur>
-</ns2:ModtagBeskedOutputType>
+</ns2:ModtagBeskedOutput>
 XML;
 
     $document = new \DOMDocument();
