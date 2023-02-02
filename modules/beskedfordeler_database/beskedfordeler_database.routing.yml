@@ -1,0 +1,16 @@
+beskedfordeler_database.index:
+  path: '/admin/beskedfordeler/database'
+  defaults:
+    _title: 'Beskedfordeler messages'
+    _controller: '\Drupal\beskedfordeler_database\Controller\Controller::index'
+  requirements:
+    _permission: 'administer site configuration'
+
+beskedfordeler_database.show:
+  path: '/admin/beskedfordeler/database/{id}'
+  defaults:
+    _title_callback: '\Drupal\beskedfordeler_database\Controller\Controller::titleShow'
+    _controller: '\Drupal\beskedfordeler_database\Controller\Controller::show'
+  requirements:
+    _permission: 'administer site configuration'
+    id: '\d+'

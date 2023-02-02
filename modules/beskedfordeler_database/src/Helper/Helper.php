@@ -3,6 +3,7 @@
 namespace Drupal\beskedfordeler_database\Helper;
 
 use Drupal\beskedfordeler\Event\AbstractBeskedModtagEvent;
+use Drupal\beskedfordeler_database\Entity\Message;
 use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -52,10 +53,8 @@ final class Helper {
    * @param bool $distinct
    *   If set, only distinct messages are loaded.
    *
-   * @return array
-   *   The message objects.
-   *
-   * @phpstan-return array<int, object>
+   * @return array|Message[]
+   *   The messages.
    */
   public function loadMessages(string $type = NULL, bool $distinct = FALSE): array {
     $query = $this->database
@@ -73,7 +72,7 @@ final class Helper {
     return $query
       ->orderBy('created', 'DESC')
       ->execute()
-      ->fetchAll();
+      ->fetchAll(\PDO::FETCH_CLASS, Message::class);
   }
 
   /**
@@ -82,16 +81,16 @@ final class Helper {
    * @param int $id
    *   The message id.
    *
-   * @return object
+   * @return \Drupal\beskedfordeler_database\Entity\Message|null
    *   The message if any.
    */
-  public function loadMessage(int $id): ?object {
+  public function loadMessage(int $id): ?Message {
     return $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m')
       ->condition('id', (string) $id)
       ->execute()
-      ->fetchObject() ?: NULL;
+      ->fetchObject(Message::class, []) ?: NULL;
   }
 
   /**
