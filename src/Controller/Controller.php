@@ -119,7 +119,7 @@ class Controller extends ControllerBase {
   private function buildResponseDocument(int $statusCode, string $errorMessage = NULL): \DOMDocument {
     $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:ModtagBeskedOutput xmlns="urn:oio:sag-dok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">
+<ns2:ModtagBeskedOutput xmlns="urn:oio:sagdok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">
  <StandardRetur>
   <StatusKode/>
   <FejlbeskedTekst/>
@@ -130,7 +130,7 @@ XML;
     $document = new \DOMDocument();
     $document->loadXML($xml);
     $xpath = new \DOMXPath($document);
-    $xpath->registerNamespace('default', 'urn:oio:sag-dok:3.0.0');
+    $xpath->registerNamespace('default', 'urn:oio:sagdok:3.0.0');
 
     $xpath->query('//default:StatusKode')->item(0)->nodeValue = $statusCode;
     $xpath->query('//default:FejlbeskedTekst')->item(0)->nodeValue = $errorMessage;
