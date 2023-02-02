@@ -49,18 +49,25 @@ final class Helper {
    *
    * @param string|null $type
    *   The message type.
+   * @param bool $distinct
+   *   If set, only distinct messages are loaded.
    *
    * @return array
    *   The message objects.
    *
    * @phpstan-return array<int, object>
    */
-  public function loadMessages(string $type = NULL): array {
+  public function loadMessages(string $type = NULL, bool $distinct = FALSE): array {
     $query = $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m');
     if (NULL !== $type) {
       $query->condition('type', $type);
+    }
+
+    if ($distinct) {
+      $query->addExpression('min(id)', 'id');
+      $query->groupBy('message');
     }
 
     return $query

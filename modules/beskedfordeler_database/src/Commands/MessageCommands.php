@@ -43,6 +43,8 @@ final class MessageCommands extends DrushCommands {
    *
    * @option type
    *  The message type.
+   * @option distinct
+   *  List only distinct messages.
    *
    * @command beskedfordeler:message:list
    * @usage beskedfordeler:message:list --help
@@ -51,8 +53,9 @@ final class MessageCommands extends DrushCommands {
    */
   public function list(array $options = [
     'type' => NULL,
+    'distinct' => FALSE,
   ]): void {
-    $messages = $this->helper->loadMessages($options['type']);
+    $messages = $this->helper->loadMessages($options['type'], $options['distinct']);
 
     foreach ($messages as $message) {
       $this->writeln(sprintf(
