@@ -92,7 +92,17 @@ class Controller extends ControllerBase {
   private function buildResponse(int $statusCode, string $errorMessage = NULL): Response {
     $document = $this->buildResponseDocument($statusCode, $errorMessage);
 
-    return new Response($document->saveXML(), Response::HTTP_OK, ['content-type' => 'application/xml']);
+    $status = Response::HTTP_OK;
+    $headers = ['content-type' => 'application/xml'];
+    $content = $document->saveXML();
+
+    $this->logger->debug(__FUNCTION__, [
+      '@status' => $status,
+      '@headers' => $headers,
+      '@content' => $content,
+    ]);
+
+    return new Response($content, $status, $headers);
   }
 
   /**
