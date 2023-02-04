@@ -2,6 +2,7 @@
 
 namespace Drupal\beskedfordeler_database\Controller;
 
+use Drupal\beskedfordeler\Helper\MessageHelper;
 use Drupal\beskedfordeler_database\Helper\Helper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -22,10 +23,18 @@ class Controller extends ControllerBase {
   private Helper $helper;
 
   /**
+   * The message helper.
+   *
+   * @var \Drupal\beskedfordeler\Helper\MessageHelper
+   */
+  private MessageHelper $messageHelper;
+
+  /**
    * Constructor.
    */
-  public function __construct(Helper $helper) {
+  public function __construct(Helper $helper, MessageHelper $messageHelper) {
     $this->helper = $helper;
+    $this->messageHelper = $messageHelper;
   }
 
   /**
@@ -33,7 +42,8 @@ class Controller extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get(Helper::class)
+      $container->get(Helper::class),
+      $container->get(MessageHelper::class)
     );
   }
 
@@ -55,6 +65,7 @@ class Controller extends ControllerBase {
 
     foreach ($messages as $index => $message) {
       $showMessageUrl = Url::fromRoute('beskedfordeler_database.show', ['id' => $message->id]);
+      $beskeddata = $this->messageHelper->getBeskeddata($message->message);
       $build['messages'][$index] = [
         'id' => (new Link(
           $message->id,
@@ -67,7 +78,7 @@ class Controller extends ControllerBase {
           '#markup' => $message->type,
         ],
         'data' => [
-          '#markup' => '<pre><code>' . htmlspecialchars($message->getDataXml() ?? '👻') . '</code></pre>',
+          '#markup' => $beskeddata ? '<pre><code>' . json_encode($beskeddata, JSON_PRETTY_PRINT) . '</code></pre>' : '👻',
         ],
       ];
     }
@@ -83,6 +94,8 @@ class Controller extends ControllerBase {
     if (NULL === $message) {
       throw new NotFoundHttpException('Message not found');
     }
+
+    $beskeddata = $this->messageHelper->getBeskeddata($message->message);
 
     $build['list'] = [
       '#type' => 'html_tag',
@@ -105,10 +118,22 @@ class Controller extends ControllerBase {
       ];
     };
 
-    $addListItem($this->t('Created at'), DrupalDateTime::createFromTimestamp($message->created)->format(DrupalDateTime::FORMAT));
-    $addListItem($this->t('Type'), $message->type);
-    $addListItem($this->t('Data'), '<pre><code>' . htmlspecialchars($message->getDataXml() ?? '👻') . '</code></pre>');
-    $addListItem($this->t('Full message'), '<pre><code>' . htmlspecialchars($message->message) . '</code></pre>');
+    $addListItem(
+      $this->t('Created at'),
+      DrupalDateTime::createFromTimestamp($message->created)->format(DrupalDateTime::FORMAT)
+    );
+    $addListItem(
+      $this->t('Type'),
+      $message->type
+    );
+    $addListItem(
+      $this->t('Data'),
+      $beskeddata ? '<pre><code>' . json_encode($beskeddata, JSON_PRETTY_PRINT) . '</code></pre>' : '👻'
+    );
+    $addListItem(
+      $this->t('Full message'),
+      '<pre><code>' . htmlspecialchars($message->message) . '</code></pre>'
+    );
 
     return $build;
   }

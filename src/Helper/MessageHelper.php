@@ -60,4 +60,50 @@ final class MessageHelper {
     return $this->eventDispatcher->dispatch($event);
   }
 
+  /**
+   * Get decoded beskeddata as XML.
+   *
+   * @return string|null
+   *   The XML.
+   */
+  public function getBeskeddataXml(string $message): ?string {
+    $document = new \DOMDocument();
+    if (@$document->loadXML($message)) {
+      $xpath = new \DOMXPath($document);
+      $xpath->registerNamespace('data', 'urn:besked:kuvert:1.0');
+      if ($nodes = $xpath->query('//data:Base64')) {
+        foreach ($nodes as $node) {
+          assert($node instanceof \DOMElement);
+          $data = new \DOMDocument();
+          $data->formatOutput = TRUE;
+          if (@$data->loadXML(base64_decode($node->nodeValue))) {
+            return $data->saveXML();
+          }
+        }
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get decoded beskeddata as array.
+   *
+   * @return array|null
+   *   The data if any.
+   *
+   * @phpstan-return array<string, mixed>
+   */
+  public function getBeskeddata(string $message): ?array {
+    $xml = $this->getBeskeddataXml($message);
+    if (NULL !== $xml) {
+      // Create SimpleXMLElement instance and convert to array in two levels.
+      return array_map(static function ($value) {
+        return $value instanceof \SimpleXMLElement ? (array) $value : $value;
+      }, (array) (new \SimpleXMLElement($xml)));
+    }
+
+    return NULL;
+  }
+
 }
