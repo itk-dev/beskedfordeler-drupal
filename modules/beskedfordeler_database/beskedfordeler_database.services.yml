@@ -1,0 +1,12 @@
+services:
+  Drupal\beskedfordeler_database\Helper\Helper:
+    arguments:
+      - '@database'
+      - '@logger.channel.beskedfordeler'
+      -
+  Drupal\beskedfordeler_database\EventSubscriber\DatabaseEventSubscriber:
+    arguments:
+      - '@Drupal\beskedfordeler_database\Helper\Helper'
+      - '@logger.channel.beskedfordeler'
+    tags:
+      - { name: 'event_subscriber' }

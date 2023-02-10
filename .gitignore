@@ -1,0 +1,7 @@
+/vendor/
+composer.lock
+
+node_modules
+yarn.lock
+
+src/Controller/Controller.php.log

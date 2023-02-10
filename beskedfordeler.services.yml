@@ -1,0 +1,9 @@
+services:
+  logger.channel.beskedfordeler:
+    parent: logger.channel_base
+    arguments: [ 'beskedfordeler' ]
+
+  Drupal\beskedfordeler\Helper\MessageHelper:
+    arguments:
+      - '@event_dispatcher'
+      - '@logger.channel.beskedfordeler'

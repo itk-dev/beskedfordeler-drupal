@@ -1,0 +1,7 @@
+beskedfordeler.PostStatusBeskedModtag:
+  path: '/beskedfordeler/PostStatusBeskedModtag'
+  defaults:
+    _controller: '\Drupal\beskedfordeler\Controller\Controller::postStatusBeskedModtag'
+  requirements:
+    # Access check performed in controller.
+    _access: 'TRUE'
