@@ -96,12 +96,6 @@ class Controller extends ControllerBase {
     $headers = ['content-type' => 'application/xml'];
     $content = $document->saveXML();
 
-    $this->logger->debug(__FUNCTION__, [
-      '@status' => $status,
-      '@headers' => $headers,
-      '@content' => $content,
-    ]);
-
     return new Response($content, $status, $headers);
   }
 
