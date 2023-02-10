@@ -50,8 +50,16 @@ class ForwardEventSubscriber extends AbstractBeskedfordelerEventSubscriber {
       ],
     ];
     foreach ($this->getEndpoints() as $endpoint) {
-      $this->client->request('POST', $endpoint, $options);
-      $this->logger->info('Message forwarded to @endpoint', ['@endpoint' => $endpoint]);
+      try {
+        $this->client->request('POST', $endpoint, $options);
+        $this->logger->info('Message forwarded to @endpoint', ['@endpoint' => $endpoint]);
+      }
+      catch (\Exception $exception) {
+        $this->logger->error('Error forwarding message to @endpoint: @message', [
+          '@endpoint' => $endpoint,
+          '@message' => $exception->getMessage(),
+        ]);
+      }
     }
   }
 
