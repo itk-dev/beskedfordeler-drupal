@@ -9,8 +9,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0]
+
 ### Added
 
 - Added Beskedfordeler module.
 
-[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/main...HEAD
+[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/itk-dev/beskedfordeler-drupal/releases/tag/1.0.0
