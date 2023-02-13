@@ -3,7 +3,8 @@
 namespace Drupal\beskedfordeler_database\Helper;
 
 use Drupal\beskedfordeler\Event\AbstractBeskedModtagEvent;
-use Drupal\beskedfordeler_database\Entity\Message;
+use Drupal\beskedfordeler\Exception\InvalidMessageException;
+use Drupal\beskedfordeler_database\Model\Message;
 use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -34,15 +35,28 @@ final class Helper {
   /**
    * Save message from event in database.
    */
-  public function saveMessage(AbstractBeskedModtagEvent $event): ?int {
-    return $this->database
-      ->insert(self::TABLE_NAME)
+  public function saveMessage(AbstractBeskedModtagEvent $event): string {
+    $message = $event->getDocument()->saveXML();
+    $messageId = $this->getMessageId($message);
+
+    $this->database
+      ->upsert(self::TABLE_NAME)
       ->fields([
+        'created',
+        'type',
+        'message',
+        'message_id',
+      ])
+      ->key('message_id')
+      ->values([
         'created' => $event->getCreatedAt(),
         'type' => $event->getType(),
-        'message' => $event->getDocument()->saveXML(),
+        'message' => $message,
+        'message_id' => $messageId,
       ])
       ->execute();
+
+    return $messageId;
   }
 
   /**
@@ -50,23 +64,16 @@ final class Helper {
    *
    * @param string|null $type
    *   The message type.
-   * @param bool $distinct
-   *   If set, only distinct messages are loaded.
    *
    * @return array|Message[]
    *   The messages.
    */
-  public function loadMessages(string $type = NULL, bool $distinct = FALSE): array {
+  public function loadMessages(string $type = NULL): array {
     $query = $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m');
     if (NULL !== $type) {
       $query->condition('type', $type);
-    }
-
-    if ($distinct) {
-      $query->addExpression('min(id)', 'id');
-      $query->groupBy('message');
     }
 
     return $query
@@ -78,17 +85,17 @@ final class Helper {
   /**
    * Load message by id.
    *
-   * @param int $id
+   * @param string $id
    *   The message id.
    *
-   * @return \Drupal\beskedfordeler_database\Entity\Message|null
+   * @return \Drupal\beskedfordeler_database\Model\Message|null
    *   The message if any.
    */
-  public function loadMessage(int $id): ?Message {
+  public function loadMessage(string $id): ?Message {
     return $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m')
-      ->condition('id', (string) $id)
+      ->condition('message_id', (string) $id)
       ->execute()
       ->fetchObject(Message::class, []) ?: NULL;
   }
@@ -112,10 +119,10 @@ final class Helper {
       self::TABLE_NAME => [
         'description' => 'Beskedfordeler message',
         'fields' => [
-          'id' => [
-            'description' => 'The primary identifier.',
-            'type' => 'serial',
-            'unsigned' => TRUE,
+          'message_id' => [
+            'description' => 'The message UUID (formatted with dashes).',
+            'type' => 'varchar',
+            'length' => 36,
             'not null' => TRUE,
           ],
           'created' => [
@@ -140,9 +147,79 @@ final class Helper {
           'created' => ['created'],
           'type' => ['type'],
         ],
-        'primary key' => ['id'],
+        'primary key' => ['message_id'],
       ],
     ];
+  }
+
+  /**
+   * Implement hook_update_N().
+   */
+  public function update9001($sandbox) {
+    $messages = $this->database
+      ->select(self::TABLE_NAME, 'm')
+      ->fields('m')
+      ->execute()
+      ->fetchAll();
+
+    $messageIdFieldName = 'message_id';
+    $spec = $this->schema()[self::TABLE_NAME]['fields'][$messageIdFieldName];
+    // Allow null values temporarily.
+    $spec['not null'] = FALSE;
+    $schema = $this->database->schema();
+    $schema->addField(self::TABLE_NAME, $messageIdFieldName, $spec);
+
+    $messageIds = [];
+
+    // Set message_id on existing messages and remove duplicate messages.
+    foreach ($messages as $message) {
+      $messageId = $this->getMessageId($message->message);
+      if (isset($messageIds[$messageId])) {
+        // Delete duplicate message.
+        $this->database
+          ->delete(self::TABLE_NAME)
+          ->condition('id', $message->id)
+          ->execute();
+      }
+      else {
+        $this->database
+          ->update(self::TABLE_NAME)
+          ->fields([
+            $messageIdFieldName => $messageId,
+          ])
+          ->condition('id', $message->id)
+          ->execute();
+      }
+      $messageIds[$messageId] = $messageId;
+    }
+
+    // Drop old primary key field.
+    $schema->dropField(self::TABLE_NAME, 'id');
+    $schema->dropPrimaryKey(self::TABLE_NAME);
+
+    // Finalize message_id field and set it a primary key.
+    $spec = $this->schema()[self::TABLE_NAME]['fields'][$messageIdFieldName];
+    $schema->changeField(self::TABLE_NAME, $messageIdFieldName, $messageIdFieldName, $spec);
+    $schema->addPrimaryKey(self::TABLE_NAME, [$messageIdFieldName]);
+  }
+
+  /**
+   * Get message id from Beskedfordeler message.
+   */
+  private function getMessageId(string $message): string {
+    $document = new \DOMDocument();
+    if (@$document->loadXML($message)) {
+      $xpath = new \DOMXPath($document);
+      $xpath->registerNamespace('ns2', 'urn:oio:besked:kuvert:1.0');
+      $xpath->registerNamespace('default', 'urn:oio:sagdok:3.0.0');
+      $element = $xpath->query('//ns2:BeskedId/default:UUIDIdentifikator')->item(0);
+
+      if (NULL !== $element) {
+        return $element->nodeValue;
+      }
+
+      throw new InvalidMessageException('Cannot find message id');
+    }
   }
 
 }

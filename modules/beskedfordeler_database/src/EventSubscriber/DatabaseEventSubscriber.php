@@ -31,7 +31,7 @@ class DatabaseEventSubscriber extends AbstractBeskedfordelerEventSubscriber {
    */
   public function processPostStatusBeskedModtag(PostStatusBeskedModtagEvent $event): void {
     $id = $this->helper->saveMessage($event);
-    $this->logger->debug('Message saved to database (id: @id)', ['@id' => $id]);
+    $this->logger->debug('Message @id saved to database', ['@id' => $id]);
   }
 
 }

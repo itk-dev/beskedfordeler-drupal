@@ -15,5 +15,19 @@ use Drupal\beskedfordeler_database\Helper\Helper;
  * @phpstan-return array<string, mixed>
  */
 function beskedfordeler_database_schema() {
-  return \Drupal::service(Helper::class)->schema();
+  return _beskedfordeler_database_helper()->schema();
+}
+
+/**
+ * Index messages by message UUID.
+ */
+function beskedfordeler_database_update_9001(&$sandbox) {
+  return _beskedfordeler_database_helper()->update9001($sandbox);
+}
+
+/**
+ * Get helper.
+ */
+function _beskedfordeler_database_helper(): Helper {
+  return \Drupal::service(Helper::class);
 }
