@@ -56,7 +56,7 @@ class Controller extends ControllerBase {
     $build['messages'] = [
       '#type' => 'table',
       '#header' => [
-        $this->t('Id'),
+        $this->t('Message id'),
         $this->t('Created at'),
         $this->t('Type'),
         $this->t('Data'),
@@ -64,11 +64,11 @@ class Controller extends ControllerBase {
     ];
 
     foreach ($messages as $index => $message) {
-      $showMessageUrl = Url::fromRoute('beskedfordeler_database.show', ['id' => $message->id]);
+      $showMessageUrl = Url::fromRoute('beskedfordeler_database.show', ['id' => $message->messageId]);
       $beskeddata = $this->messageHelper->getBeskeddata($message->message);
       $build['messages'][$index] = [
-        'id' => (new Link(
-          $message->id,
+        'message_id' => (new Link(
+          $message->messageId,
           $showMessageUrl
         ))->toRenderable(),
         'created_at' => [
@@ -89,7 +89,7 @@ class Controller extends ControllerBase {
   /**
    * Show action.
    */
-  public function show(int $id): array {
+  public function show(string $id): array {
     $message = $this->helper->loadMessage($id);
     if (NULL === $message) {
       throw new NotFoundHttpException('Message not found');
@@ -141,7 +141,7 @@ class Controller extends ControllerBase {
   /**
    * Title callback.
    */
-  public function titleShow(int $id) {
+  public function titleShow(string $id) {
     return $this->t('Beskedfordeler message #:id', [':id' => $id]);
   }
 

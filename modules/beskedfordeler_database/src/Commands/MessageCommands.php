@@ -43,8 +43,6 @@ final class MessageCommands extends DrushCommands {
    *
    * @option type
    *  The message type.
-   * @option distinct
-   *  List only distinct messages.
    *
    * @command beskedfordeler:message:list
    * @usage beskedfordeler:message:list --help
@@ -53,14 +51,13 @@ final class MessageCommands extends DrushCommands {
    */
   public function list(array $options = [
     'type' => NULL,
-    'distinct' => FALSE,
   ]): void {
     $messages = $this->helper->loadMessages($options['type'], $options['distinct']);
 
     foreach ($messages as $message) {
       $this->writeln(sprintf(
-        '% 8d %s %s',
-        (int) $message->id,
+        '%s %s %s',
+        $message->messageId,
         DrupalDateTime::createFromTimestamp($message->created)->format(DrupalDateTime::FORMAT),
         $message->type
       ));
@@ -70,7 +67,7 @@ final class MessageCommands extends DrushCommands {
   /**
    * Show message.
    *
-   * @param int $id
+   * @param string $id
    *   The message id.
    * @param array $options
    *   The command options.
@@ -83,14 +80,14 @@ final class MessageCommands extends DrushCommands {
    * @command beskedfordeler:message:show
    * @usage beskedfordeler:message:show --help
    */
-  public function show(int $id, array $options = [
+  public function show(string $id, array $options = [
     'decode-data' => FALSE,
     'data-only' => FALSE,
   ]): void {
     $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {
-      throw new RuntimeException(sprintf('Cannot find message with id %d.', $id));
+      throw new RuntimeException(sprintf('Cannot load message with id %s.', $id));
     }
     else {
       $document = new \DOMDocument();
@@ -126,21 +123,21 @@ final class MessageCommands extends DrushCommands {
   /**
    * Dispatch message.
    *
-   * @param int $id
+   * @param string $id
    *   The message id.
    *
    * @command beskedfordeler:message:dispatch
    * @usage beskedfordeler:message:dispatch --help
    */
-  public function dispatch(int $id): void {
+  public function dispatch(string $id): void {
     $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {
-      throw new RuntimeException(sprintf('Cannot find message with id %d.', $id));
+      throw new RuntimeException(sprintf('Cannot find message with id %s.', $id));
     }
     else {
       $event = $this->messageHelper->dispatch($message->type, $message->message, $message->created);
-      $this->output()->writeln(sprintf('Message %d dispatched (%s)', $id, get_class($event)));
+      $this->output()->writeln(sprintf('Message %s dispatched (%s)', $id, get_class($event)));
     }
   }
 

@@ -9,6 +9,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Indexed message in database by message id.
+
 ## [1.0.0]
 
 ### Added
