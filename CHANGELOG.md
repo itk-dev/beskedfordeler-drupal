@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Indexed message in database by message id.
+- Changed `drush/drush` requirement
 
 ## [1.0.0]
 
