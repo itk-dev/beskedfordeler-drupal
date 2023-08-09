@@ -64,11 +64,13 @@ class Controller extends ControllerBase {
       $request = $this->requestStack->getCurrentRequest();
       $message = $request->getContent();
 
-      $this->messageHelper->dispatch(
-        MessageHelper::MESSAGE_TYPE_POST_STATUS_BESKED_MODTAG,
-        $message,
-        $request->server->get('REQUEST_TIME')
-      );
+      if ('POST' === $request->getMethod()) {
+        $this->messageHelper->dispatch(
+          MessageHelper::MESSAGE_TYPE_POST_STATUS_BESKED_MODTAG,
+          $message,
+          $request->server->get('REQUEST_TIME')
+        );
+      }
 
       $statusCode = 20;
       $errorMessage = NULL;
