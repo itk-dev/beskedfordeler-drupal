@@ -9,15 +9,17 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.1]
+
+### Changed
+
+- [PR-4](https://github.com/itk-dev/beskedfordeler-drupal/pull/4)
+  Processed XML only on POST requests
 - Changed `drush/drush` requirement
 
 ## [1.1.0]
 
-### Changed
-
 - Indexed message in database by message id.
-- [PR-4](https://github.com/itk-dev/beskedfordeler-drupal/pull/4)
-  Processed XML only on POST requests
 
 ## [1.0.0]
 
@@ -25,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added Beskedfordeler module.
 
-[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/itk-dev/beskedfordeler-drupal/releases/tag/1.0.0
