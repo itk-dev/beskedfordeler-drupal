@@ -9,6 +9,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Changed `drush/drush` requirement
+
+## [1.1.0]
+
 ### Changed
 
 - Indexed message in database by message id.
@@ -21,5 +25,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added Beskedfordeler module.
 
-[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/itk-dev/beskedfordeler-drupal/releases/tag/1.0.0
