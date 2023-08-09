@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "drush/drush": "^10 || ^11"
+        "drush/drush": "^11 || ^12"
     },
     "require-dev": {
         "wsdltophp/packagegenerator": "^4.0",
