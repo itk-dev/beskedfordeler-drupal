@@ -2,7 +2,7 @@ name: 'Beskedfordeler database'
 type: module
 description: 'Store Beskedfordeler messages in database.'
 package: 'Beskedfordeler'
-core_version_requirement: ^9
+core_version_requirement: ^9 || ^10
 
 dependencies:
   - beskedfordeler:beskedfordeler
