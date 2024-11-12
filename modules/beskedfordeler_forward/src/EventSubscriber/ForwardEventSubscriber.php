@@ -2,12 +2,12 @@
 
 namespace Drupal\beskedfordeler_forward\EventSubscriber;
 
+use Drupal\Core\Site\Settings;
 use Drupal\beskedfordeler\Event\PostStatusBeskedModtagEvent;
 use Drupal\beskedfordeler\EventSubscriber\AbstractBeskedfordelerEventSubscriber;
-use Drupal\Core\Http\RequestStack;
-use Drupal\Core\Site\Settings;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Event subscriber for forwarding Beskedfordeler messages.
