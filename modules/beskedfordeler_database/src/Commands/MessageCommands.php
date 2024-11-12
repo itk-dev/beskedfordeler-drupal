@@ -2,9 +2,9 @@
 
 namespace Drupal\beskedfordeler_database\Commands;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\beskedfordeler\Helper\MessageHelper;
 use Drupal\beskedfordeler_database\Helper\Helper;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -49,9 +49,11 @@ final class MessageCommands extends DrushCommands {
    *
    * @phpstan-param array<string, mixed> $options
    */
-  public function list(array $options = [
-    'type' => NULL,
-  ]): void {
+  public function list(
+    array $options = [
+      'type' => NULL,
+    ],
+  ): void {
     $messages = $this->helper->loadMessages($options['type'], $options['distinct']);
 
     foreach ($messages as $message) {
@@ -80,10 +82,13 @@ final class MessageCommands extends DrushCommands {
    * @command beskedfordeler:message:show
    * @usage beskedfordeler:message:show --help
    */
-  public function show(string $id, array $options = [
-    'decode-data' => FALSE,
-    'data-only' => FALSE,
-  ]): void {
+  public function show(
+    string $id,
+    array $options = [
+      'decode-data' => FALSE,
+      'data-only' => FALSE,
+    ],
+  ): void {
     $message = $this->helper->loadMessage($id);
 
     if (NULL === $message) {

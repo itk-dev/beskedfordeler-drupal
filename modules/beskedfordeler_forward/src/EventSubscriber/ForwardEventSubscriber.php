@@ -23,7 +23,7 @@ class ForwardEventSubscriber extends AbstractBeskedfordelerEventSubscriber {
   /**
    * The request stack.
    *
-   * @var \Drupal\Core\Http\RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   private RequestStack $requestStack;
 
