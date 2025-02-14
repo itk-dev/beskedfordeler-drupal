@@ -9,6 +9,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Updated GitHub workflow images.
+
 ## [1.2.1]
 
 ### Changed
