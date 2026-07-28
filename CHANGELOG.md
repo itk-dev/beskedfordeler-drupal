@@ -9,6 +9,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- [PR-10](https://github.com/itk-dev/beskedfordeler-drupal/pull/10) 
+  Drupal 11 compatibility
+
 ## [1.1.1]
 
 ### Changed
