@@ -2,8 +2,8 @@
 
 namespace Drupal\beskedfordeler\Event;
 
-use Drupal\beskedfordeler\Exception\InvalidEventException;
 use Drupal\Component\EventDispatcher\Event;
+use Drupal\beskedfordeler\Exception\InvalidEventException;
 
 /**
  * Abstract event for BeskedModtag.

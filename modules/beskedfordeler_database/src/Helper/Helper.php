@@ -2,10 +2,10 @@
 
 namespace Drupal\beskedfordeler_database\Helper;
 
+use Drupal\Core\Database\Connection;
 use Drupal\beskedfordeler\Event\AbstractBeskedModtagEvent;
 use Drupal\beskedfordeler\Exception\InvalidMessageException;
 use Drupal\beskedfordeler_database\Model\Message;
-use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 
@@ -68,7 +68,7 @@ final class Helper {
    * @return array|Message[]
    *   The messages.
    */
-  public function loadMessages(string $type = NULL): array {
+  public function loadMessages(?string $type = NULL): array {
     $query = $this->database
       ->select(self::TABLE_NAME, 'm')
       ->fields('m');

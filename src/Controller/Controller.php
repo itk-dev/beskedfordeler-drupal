@@ -2,8 +2,8 @@
 
 namespace Drupal\beskedfordeler\Controller;
 
-use Drupal\beskedfordeler\Helper\MessageHelper;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\beskedfordeler\Helper\MessageHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -91,7 +91,7 @@ class Controller extends ControllerBase {
    *
    * @see self::buildResponseDocument()
    */
-  private function buildResponse(int $statusCode, string $errorMessage = NULL): Response {
+  private function buildResponse(int $statusCode, ?string $errorMessage = NULL): Response {
     $document = $this->buildResponseDocument($statusCode, $errorMessage);
 
     $status = Response::HTTP_OK;
@@ -112,7 +112,7 @@ class Controller extends ControllerBase {
    * @return \DOMDocument
    *   The Outputdokument.
    */
-  private function buildResponseDocument(int $statusCode, string $errorMessage = NULL): \DOMDocument {
+  private function buildResponseDocument(int $statusCode, ?string $errorMessage = NULL): \DOMDocument {
     $xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:ModtagBeskedOutput xmlns="urn:oio:sagdok:3.0.0" xmlns:ns2="urn:oio:sts:1.0.0">
