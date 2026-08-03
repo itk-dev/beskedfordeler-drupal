@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
         with:
           fetch-depth: 2
 
@@ -39,7 +39,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -71,7 +71,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -104,7 +104,7 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -117,10 +117,10 @@ jobs:
           # Copy our module source code into the Drupal module folder.
           mkdir -p drupal/web/modules/contrib/beskedfordeler
           cp -r beskedfordeler.* composer.json src drupal/web/modules/contrib/beskedfordeler
-          
+
           # Add our module as a composer repository.
           composer --working-dir=drupal --no-interaction config --append repositories.itk-dev/beskedfordeler-drupal path web/modules/contrib/beskedfordeler
-          
+
           # Restore Drupal composer repository.
           composer --no-interaction --working-dir=drupal config repositories.drupal composer https://packages.drupal.org/8
 
@@ -142,12 +142,12 @@ jobs:
     name: Markdown coding standards
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache yarn packages
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
