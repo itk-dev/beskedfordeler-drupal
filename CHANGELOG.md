@@ -9,7 +9,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-- [PR-10](https://github.com/itk-dev/beskedfordeler-drupal/pull/10) 
+## [1.3.0] - 2026-08-03
+
+- [PR-10](https://github.com/itk-dev/beskedfordeler-drupal/pull/10)
   Drupal 11 compatibility
 - Updated GitHub workflow images.
 
@@ -45,7 +47,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added Beskedfordeler module.
 
-[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.1...1.2.0
 [1.1.1]: https://github.com/itk-dev/beskedfordeler-drupal/compare/1.1.0...1.1.1
