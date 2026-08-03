@@ -217,9 +217,9 @@ final class Helper {
       if (NULL !== $element) {
         return $element->nodeValue;
       }
-
-      throw new InvalidMessageException('Cannot find message id');
     }
+
+    throw new InvalidMessageException('Cannot find message id');
   }
 
 }
